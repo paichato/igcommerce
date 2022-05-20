@@ -51,9 +51,14 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
       }
       if (productExists) {
         productExists.amount = amount;
+        const newarray = updatedCart.filter((prod) => prod.id !== productId);
+        newarray.push(productExists);
+
+        setCart(newarray);
+        localStorage.setItem("@RocketShoes:cart", JSON.stringify(newarray));
       } else {
         const product = await api.get(`/products/${productId}`);
-        const newProduct = { ...product.data, amount: 1 };
+        const newProduct = { ...product.data, amount };
         updatedCart.push(newProduct);
         setCart(updatedCart);
         localStorage.setItem("@RocketShoes:cart", JSON.stringify(updatedCart));
